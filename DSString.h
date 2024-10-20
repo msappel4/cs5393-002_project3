@@ -96,38 +96,37 @@ public:
 #endif
 */
 
-// Megan first try
+// Megan
 #ifndef DSSTRING_H
 #define DSSTRING_H
 
 #include <iostream>
-#include <vector>
+#include <cstring>
 
-class DSString {
+class DSString
+{
 private:
-    char *data; // Pointer to character array
-    size_t len; // Length of the string
+    char *data; // a pointer to a character array containing the string with a `\0` terminator
+    size_t len; // the length of the string (without the terminator)
 
 public:
-    DSString(); // Default constructor
-    DSString(const char *); // Constructor from C-string
-    DSString(const DSString &); // Copy constructor
-    DSString &operator=(const DSString &); // Copy assignment operator
-    ~DSString(); // Destructor
+    DSString();
+    DSString(const char *); // constructor that converts a c-string
+    DSString(const DSString &); // copy constructor
+    ~DSString(); // destructor
+    DSString &operator=(const DSString &); // assignment operator
 
-    size_t length() const; // Returns the length of the string
-    char &operator[](size_t); // Returns a reference to the character at the index
-    DSString operator+(const DSString &) const; // Overloaded + operator
-    bool operator==(const DSString &) const; // Equality operator
-    bool operator<(const DSString &) const; // Less-than operator
-    DSString substring(size_t start, size_t numChars) const; // Substring method
-    DSString toLower() const; // Converts string to lowercase
-    const char *c_str() const; // Returns a null-terminated C-string
-
-    std::vector<DSString> split(char delimiter) const; // Split method
-
-    friend std::ostream &operator<<(std::ostream &, const DSString &); // Stream insertion operator
+    size_t length() const; // returns the length of the string
+    char &operator[](size_t) const; // returns a reference to the character at the given index
+    DSString operator+(const DSString &) const; // concatenation operator
+    bool operator==(const DSString &) const; // equality operator
+    bool operator<(const DSString &) const; // less than operator
+    DSString substring(size_t start, size_t numChars) const; // substring method
+    DSString toLower() const; // lowercase conversion
+    char *c_str() const; // returns a c-string
+    friend std::ostream &operator<<(std::ostream &os, const DSString &str); // output operator
 };
 
 #endif
+
 
