@@ -104,7 +104,7 @@ public:
 #include <cstring>
 #include <string>
 #include <sstream>
-#include "OleanderStemmingLibrary-master/src/english_stem.h"
+#include "OleanderStemmingLibrary-english.h"
 
 class DSString
 {
