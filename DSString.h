@@ -102,6 +102,9 @@ public:
 
 #include <iostream>
 #include <cstring>
+#include <string>
+#include <sstream>
+#include "OleanderStemmingLibrary-master/src/english_stem.h"
 
 class DSString
 {
@@ -115,7 +118,6 @@ public:
     DSString(const DSString &); // copy constructor
     ~DSString(); // destructor
     DSString &operator=(const DSString &); // assignment operator
-
     size_t length() const; // returns the length of the string
     char &operator[](size_t) const; // returns a reference to the character at the given index
     DSString operator+(const DSString &) const; // concatenation operator
@@ -125,7 +127,11 @@ public:
     DSString toLower() const; // lowercase conversion
     char *c_str() const; // returns a c-string
     friend std::ostream &operator<<(std::ostream &os, const DSString &str); // output operator
-};
+
+    DSString removesymbol();
+    size_t findindexchar(char char);
+    DSString stem();
+    };
 
 #endif
 
