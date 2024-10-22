@@ -13,6 +13,8 @@
 
 // Megan 
 #include "DSString.h"
+#include <cctype> // For tolower
+#include <stdexcept> // For std::out_of_range
 
 DSString::DSString()
 {
@@ -120,4 +122,51 @@ std::ostream &operator<<(std::ostream &os, const DSString &str)
 {
     os << str.data;
     return os;
+}
+
+// Remove symbols from the string
+DSString DSString::removesymbol()
+{
+    DSString result;
+    result.data = new char[len + 1];
+    size_t j = 0;
+
+    for (size_t i = 0; i < len; i++)
+    {
+        if (isalnum(data[i])) // Check if character is alphanumeric
+        {
+            result.data[j++] = data[i];
+        }
+    }
+    result.data[j] = '\0'; // Null-terminate
+    result.len = j; // Set the new length
+    return result;
+}
+
+// Find the index of the first occurrence of a character
+size_t DSString::findindexchar(char c)
+{
+    for (size_t i = 0; i < len; i++)
+    {
+        if (data[i] == c)
+            return i;
+    }
+    return std::string::npos; // Return npos if character is not found
+}
+
+
+DSString DSString::stem()
+{
+    #include "OleanderStemmingLibrary-english.h" // Include the stemming library
+
+DSString DSString::stem()
+{
+    char *tempCStr = new char[len + 1];
+    strcpy(tempCStr, data); // Copy current string to temporary C-string
+    char *stemmedCStr = english_stem(tempCStr);
+    DSString result(stemmedCStr);
+    delete[] tempCStr; // Free the temporary C-string if it was dynamically allocated
+    return result; // Return the stemmed DSString
+}
+
 }
