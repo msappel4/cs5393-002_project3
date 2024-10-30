@@ -1,10 +1,6 @@
-// Megan 
 #include "DSString.h"
-#include <cctype> // For tolower
-#include <stdexcept> // For std::out_of_range
-#include <vector>
-#include "OleanderStemmingLibrary-english.h" // Include the stemming library
 
+// blank constructor
 DSString::DSString()
 {
     data = new char[1];
@@ -12,148 +8,186 @@ DSString::DSString()
     len = 0;
 }
 
-DSString::DSString(const char *cstr)
+// constructor that converts a cstring
+DSString::DSString(const char *str)
 {
-    len = strlen(cstr);
+    //calculate the length of the input C-string
+    len = 0;
+    while (str[len] != '\0')
+    {
+        len++;
+    }
+    //allocate memory and copy the C-string
     data = new char[len + 1];
-    strcpy(data, cstr);
+    for (size_t i = 0; i < len; i++)
+    {
+        data[i] = str[i];
+    }
+    data[len] = '\0';
 }
 
-DSString::DSString(const DSString &str)
+//rule of three
+//copy constructor
+DSString::DSString(const DSString &copy)
 {
-    len = str.len;
-    data = new char[len + 1];
-    strcpy(data, str.data);
+    data = new char[copy.length() + 1];
+    len = copy.length();
+    for (int i = 0; i < copy.length(); i++)
+    {
+        data[i] = copy.data[i];
+    }
+    data[len] = '\0';
 }
 
+//destructor
 DSString::~DSString()
 {
-    delete[] data; // Memory cleanup
+    delete[] data;
 }
 
-DSString &DSString::operator=(const DSString &str)
+//assignment operator
+DSString &DSString::operator=(const DSString &newStr)
 {
-    if (this != &str)
+    delete[] data;
+    len = newStr.length();
+    data = new char[len + 1];
+    for (size_t i = 0; i < len; i++)
     {
-        delete[] data; // Free existing memory
-        len = str.len;
-        data = new char[len + 1];
-        strcpy(data, str.data); // Copy string
+        *(data + i) = *(newStr.data + i);
     }
+    data[len] = '\0'; 
     return *this;
 }
 
+//length of string
 size_t DSString::length() const
 {
     return len;
 }
 
-char &DSString::operator[](size_t index) const
+//character at given index
+char &DSString::operator[](size_t index)
 {
-    if (index < len)
+    if (index < length())
+    {
         return data[index];
-    throw std::out_of_range("Index out of range"); // Better error handling
+        throw std::out_of_range("Index out of bounds");
+    }
 }
 
-DSString DSString::operator+(const DSString &str) const
+//overload operator
+DSString DSString::operator+(const DSString &adding) const
 {
-    DSString result;
-    result.len = len + str.len;
-    result.data = new char[result.len + 1];
-    strcpy(result.data, data); // Copy current string
-    strcat(result.data, str.data); // Append new string
-    return result;
-}
-
-bool DSString::operator==(const DSString &str) const
-{
-    return (len == str.len) && (strcmp(data, str.data) == 0); // Use strcmp for comparison
-}
-
-bool DSString::operator<(const DSString &str) const
-{
-    return strcmp(data, str.data) < 0; // Use strcmp for lexicographical comparison
-}
-
-DSString DSString::substring(size_t start, size_t numChars) const
-{
-    if (start >= len) return DSString(); // Check for valid start
-    if (start + numChars > len) numChars = len - start; // Adjust if out of bounds
-
-    char *temp = new char[numChars + 1];
-    strncpy(temp, data + start, numChars);
-    temp[numChars] = '\0'; // Ensure null-termination
-    DSString result(temp);
-    delete[] temp; // Clean up temporary memory
-    return result;
-}
-
-DSString DSString::toLower() const
-{
-    DSString result;
-    result.data = new char[len + 1];
-    result.len = len;
-
+    DSString fullSize;
+    fullSize.len = len + adding.len + 1;
+    int x = 0;
     for (size_t i = 0; i < len; i++)
     {
-        result.data[i] = tolower(data[i]); // Convert to lowercase
+        fullSize.data[i] = data[i];
     }
-    result.data[len] = '\0'; // Null-terminate
-    return result;
+    for (size_t i = len; i < ((len - 0) + adding.len); i++)
+    {
+        fullSize[i] = adding.data[x];
+        x++;
+    }
+    fullSize.data[fullSize.len] = '\0';
+    return fullSize;
 }
 
+//compare and order strings pt1
+bool DSString::operator==(const DSString &checkEqual) const
+{
+    if(checkEqual.len != this->len) {
+        return false;
+    }
+    bool a = true;
+    char *newCh = checkEqual.c_str();
+    for (size_t i = 0; i < len + 1; i++)
+    {
+        if ((data[i]) != newCh[i])
+            a = false;
+    }
+    return a;
+}
+
+//compare and order strings pt2
+bool DSString::operator<(const DSString &checkLess) const
+{
+    size_t minLen = std::min(len, checkLess.len); 
+    for (size_t i = 0; i < minLen; i++)
+    {
+        if (data[i] < checkLess.data[i])
+            return true;
+        else if (data[i] > checkLess.data[i])
+            return false;
+    }
+    return len < checkLess.len;
+}
+
+//returns new string object
+//start (start index), numChars (count of characters to copy)
+DSString DSString::substring(size_t start, size_t numChars) const
+{
+    DSString substr;
+    substr.len = numChars;
+    delete[] substr.data;
+    substr.data = new char[numChars + 1];
+    for (size_t i = start; i < start + numChars; i++)
+    {
+        substr.data[i - start] = data[i];
+    }
+    substr.data[numChars] = '\0';
+    return substr;
+}
+
+//converts to lowercase
+DSString DSString::toLower() const
+{
+    int lowAsciiVal = 0;
+    for (size_t i = 0; i < len; i++)
+    {
+        if ((data[i] < 91) && (data[i] > 64))
+        {
+            lowAsciiVal = toascii(data[i]) + 32;
+            data[i] = char(lowAsciiVal);
+        }
+    }
+    return data;
+} //used ASCII table
+
+//returns pointer to data
 char *DSString::c_str() const
 {
+
     return data;
 }
 
-std::ostream &operator<<(std::ostream &os, const DSString &str)
+//ostream returns
+std::ostream &operator<<(std::ostream &output, const DSString &str)
 {
-    os << str.data;
-    return os;
+    return output << str.data;
 }
 
-// Remove symbols from the string
-DSString DSString::removesymbol()
+//tokenizer function
+std::vector<DSString> DSString::tokenizeDSString()
 {
-    DSString result;
-    result.data = new char[len + 1];
-    size_t j = 0;
-
-    for (size_t i = 0; i < len; i++)
+    std::vector<DSString> words;
+    size_t counter = 0;
+    DSString currentWord;
+    for (size_t i = 0; i < length() + 1; ++i)
     {
-        if (isalnum(data[i])) // Check if character is alphanumeric
+        char currentChar = data[i];
+        if (currentChar == ' ' || currentChar == ',' || currentChar == ';' || currentChar == '.' || currentChar == ':' || currentChar == '!' || currentChar == '?' || currentChar == '\0'
+        && i!= counter)
         {
-            result.data[j++] = data[i];
+            currentWord = substring(counter, i - counter);
+            words.push_back(currentWord);
+            counter = i + 1;
+        }
+        else if (currentChar == ' ' || currentChar == ',' || currentChar == ';' || currentChar == '.' || currentChar == ':' || currentChar == '!' || currentChar == '?' || currentChar == '\0'
+        && i!= counter){
+            counter++;
         }
     }
-    result.data[j] = '\0'; // Null-terminate
-    result.len = j; // Set the new length
-    return result;
-}
-
-// Find the index of the first occurrence of a character
-size_t DSString::findindexchar(char c)
-{
-    for (size_t i = 0; i < len; i++)
-    {
-        if (data[i] == c)
-            return i;
-    }
-    return std::string::npos; // Return npos if character is not found
-}
-
-DSString DSString::stem()
-{
-    if (len <= 0 || data == nullptr) {
-    // Handle the case where there's nothing to stem
-    return DSString(); // or return an empty DSString
-    }
-    char *tempCStr = new char[len + 1];
-    strcpy(tempCStr, data); // Copy current string to temporary C-string
-    char *stemmedCStr = stemming::english_stem(tempCStr);
-    DSString result(stemmedCStr); // Ensure this constructor handles the string correctly
-    delete[] tempCStr; // Free the temporary C-string
-    // You may need to free 'stemmedCStr' here if it was dynamically allocated
-    return result; // Return the stemmed DSString
+    return words;
 }
