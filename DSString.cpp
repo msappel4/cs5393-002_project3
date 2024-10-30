@@ -1,20 +1,9 @@
-/*
-#include "DSString.h"
-
-/* 
- * Implement the functions defined in DSString.h. You may add more functions as needed
- * for the project. 
- *
- * Note that c-strings don's store an explicit length but use `\0` as the terminator symbol
- * but your class should store its length in a member variable. 
- * DDO NOT USE C-STRING FUNCTIONS <string.h> or <cstring>.
- */  
-*/
-
 // Megan 
 #include "DSString.h"
 #include <cctype> // For tolower
 #include <stdexcept> // For std::out_of_range
+#include <vector>
+#include "OleanderStemmingLibrary-english.h" // Include the stemming library
 
 DSString::DSString()
 {
@@ -154,19 +143,17 @@ size_t DSString::findindexchar(char c)
     return std::string::npos; // Return npos if character is not found
 }
 
-
 DSString DSString::stem()
 {
-    #include "OleanderStemmingLibrary-english.h" // Include the stemming library
-
-DSString DSString::stem()
-{
+    if (len <= 0 || data == nullptr) {
+    // Handle the case where there's nothing to stem
+    return DSString(); // or return an empty DSString
+    }
     char *tempCStr = new char[len + 1];
     strcpy(tempCStr, data); // Copy current string to temporary C-string
-    char *stemmedCStr = english_stem(tempCStr);
-    DSString result(stemmedCStr);
-    delete[] tempCStr; // Free the temporary C-string if it was dynamically allocated
+    char *stemmedCStr = stemming::english_stem(tempCStr);
+    DSString result(stemmedCStr); // Ensure this constructor handles the string correctly
+    delete[] tempCStr; // Free the temporary C-string
+    // You may need to free 'stemmedCStr' here if it was dynamically allocated
     return result; // Return the stemmed DSString
-}
-
 }

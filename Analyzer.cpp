@@ -1,6 +1,8 @@
 #include "Analyzer.h"
+#include <vector>
 
-Analyzer::Analyzer() {}
+Analyzer::Analyzer() {
+}
 
 void Analyzer::trainfunction(char* fileName) {
     auto start = chrono::high_resolution_clock::now();
@@ -20,8 +22,8 @@ void Analyzer::trainfunction(char* fileName) {
 
     while (inFS.getline(line, 1000, ',')) {
         // Store sentiments in isPositive
-        DSString sentiment(line);
-        isPositive = (sentiment[0] == '1'); // Adjusted to use the correct condition
+        DSString sentimentline(line);
+        isPositive = (sentimentline[0] == '1'); // Adjusted to use the correct condition
 
         // Read tweets
         for (size_t i = 0; i < 4; i++)
