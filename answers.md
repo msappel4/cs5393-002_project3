@@ -2,7 +2,7 @@
 
 **Complete this document, commit your changes to Github and submit the repository URL to Canvas.** Keep your answers short and precise.
 
-Your Name:
+Your Name: Megan Appel and Diego Mejia
 
 Used free extension: [ ] 24 hrs or [ ] 48 hrs
 
@@ -15,10 +15,9 @@ Place [x] for what applies.
 
 ## UML Diagram
 
-Add your UML class diagram here.
+UML_analyzer.png
+![UML_analyzer](https://github.com/user-attachments/assets/083ac337-6260-4437-a5b9-e32cd90968a3)
 
-Replace the following image with your diagram. You can draw it by hand and take a photo.
-![image](https://github.com/user-attachments/assets/f6771a10-fecb-41c1-af30-051a099d7c21)
 
 ## Answers
 
@@ -36,7 +35,7 @@ Replace the following image with your diagram. You can draw it by hand and take 
 
 4. What accuracy did your algorithm achieve on the provides training and test data? 
 
-   > My accuracy: xx%
+    My accuracy: 67.2%
 
    The TA will run your code on Linux and that accuracy value will be used to determine your grade.
 
