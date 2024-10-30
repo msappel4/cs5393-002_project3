@@ -1,32 +1,40 @@
-/*
-#include <iostream>
 
-
-int main(int argc, char** argv)
-{  
-    std::cout << "I will be a sentiment analyzer!" << std::endl;
-
-    return 0;
-}
-*/
-
-// Megan 
 #include <iostream>
 #include "Analyzer.h"
+#include "DSString.h"
+#include <chrono>
 
-using namespace std;
+int main(int argc, char** argv)
+{   
+   
+    //create sentiment analyzer object
+    SentimentAnalyzer sa;
 
-int main(int argc, char** files) {  
-    if (argc != 6) {
-        cerr << "Error: input 5 arguments\n";
-        return 0;
-    }
+    // Record start time for training
+    auto startTrain = std::chrono::high_resolution_clock::now();
+    
+    //pass in argv[1] as first file
+        sa.train(argv[1]);
+    
 
-    Analyzer analyzer;
+    // Record end time for training
+    auto finishTrain = std::chrono::high_resolution_clock::now();
+    // Compute and print the elapsed time for training
+    std::chrono::duration<double> elapsedTrain = finishTrain - startTrain;
+    std::cout << "Training elapsed time: " << elapsedTrain.count() << " seconds" << std::endl;
 
-    analyzer.trainfunction(files[1]); // "train_dataset_20k.csv"
-    analyzer.predictfunction(files[2]); // "test_dataset_10k.csv"
-    analyzer.predictcheck(files[3], files[4], files[5]); // "test_dataset_sentiment_10k.csv", "result.csv", "accuracy.txt"
+    // Record start time for testing
+    auto startTest = std::chrono::high_resolution_clock::now();
+    //pass in argv[2], argv[2], argv[2], argv[2], argv[2]
+        sa.test(argv[2],argv[3],argv[4],argv[5]);
 
+
+    // Record end time for testing
+    auto finishTest = std::chrono::high_resolution_clock::now();
+    // Compute and print the elapsed time for testing
+    std::chrono::duration<double> elapsedTest = finishTest - startTest;
+    std::cout << "Testing elapsed time: " << elapsedTest.count() << " seconds" << std::endl;
+
+    
     return 0;
 }
