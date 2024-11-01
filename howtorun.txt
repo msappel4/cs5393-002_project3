@@ -1,0 +1,10 @@
+Save files to a folder in VS code
+Save data files to a data folder within the previous folder
+Right click on overall folder, click open in integrated terminal
+Make sure there is no CMakeCache.txt file in the folder
+In terminal, type mkdir build, enter
+Type cd build, enter
+Type cmake .., enter
+Type make, enter
+Type ./sentiment data/train_dataset_20k.csv data/test_dataset_10k.csv data/test_dataset_sentiment_10k.csv results.csv accuracy.txt, enter
+Results.csv and accuracy.csv should appear in build folder
