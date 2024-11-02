@@ -34,7 +34,8 @@ For each new tweet, the classifier tokenizes the tweet’s text and checks the f
 
 3. How long did your code take for classification and what is the time complexity of your classification implementation (Big-Oh notation)? Explain why.
 
-   > Your answer
+    The testing time is about 6.892 which prints to console. The complexity is O(N^2).
+    The first loop is O(MN) because each line is tokenized. But there is another loop that goes through IDs N times and also iterates through each line also N times. The complexity for this is O(N^2) which overrules O(MN).
 
 4. What accuracy did your algorithm achieve on the provides training and test data? 
 
